@@ -101,7 +101,7 @@ const CourseComponent: React.FC<CourseComponentProps> = ({ currentUser }) => {
                   key={course._id}
                 >
                   <div className="card-body">
-                    <h5 className="card-title">Course: {course.course}</h5>
+                    <h5 className="card-title">{course.course}</h5>
                     <p style={{ margin: "0.5rem 0rem" }} className="card-text">
                       {course.description}
                     </p>

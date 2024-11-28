@@ -77,12 +77,22 @@ const EnrollComponent = (props: CourseComponentProps) => {
         </>
       )}
       {currentUser && searchResult && searchResult.length != 0 && (
-        <div>
+        <div style={{ display: "flex" }}>
           {searchResult.map((course) => (
-            <div key={course._id} className="card" style={{ width: "18rem" }}>
+            <div
+              key={course._id}
+              className="card"
+              style={{ width: "18rem", margin: "0.5rem" }}
+            >
               <div className="card-body">
-                <h5 className="card-title">Course: {course.course}</h5>
-                <p className="card-text">{course.description}</p>
+                <h5 className="card-title">{course.course}</h5>
+                <p style={{ margin: "0.5rem 0rem" }} className="card-text">
+                  {course.description}
+                </p>
+                <br />
+                <p style={{ margin: "0.5rem 0rem" }}>
+                  Instructor: {course.instructor}
+                </p>
                 <a
                   href="#"
                   onClick={handleEnroll}

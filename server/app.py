@@ -130,6 +130,7 @@ def enroll_course_by_id(_id):
     if result["status"] == "error":
         return result["message"], 400
     
+    print(result["message"])
     return result["message"], 200
 
 @app.route(COURSE_ROUTE + "/allCourse", methods=["GET"])

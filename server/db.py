@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, ForeignKey
+from sqlalchemy import create_engine, Column, ForeignKey, Table
 from sqlalchemy import Integer, Text
 from sqlalchemy.orm import Session, sessionmaker, joinedload, relationship
 from sqlalchemy.exc import IntegrityError
@@ -175,20 +175,22 @@ def get_enrolled_course(_id):
     session = create_session()
     
     try:
-        courses_data = session.query(Courses).filter(
-            Courses.students.like(f'%{_id}%') 
-        ).all()
-
+        enrolled = []
+        courses_data = session.query(Courses).all()
+        for course in courses_data:
+            students = json.loads(course.students)
+            if int(_id) in students:
+                enrolled.append(course)
+            
         # Inseert the instructor name instead of instructor id
         result = []
-        for course in courses_data:
+        for enrolled_course in enrolled:
             instructor = session.query(Users.username).filter(Users._id == Courses.instructor_id).first()
-            print(instructor, type(instructor))
-            course_dict = course.toDict()
-            # course_dict["instructor"] = instructor.toDict() if instructor else None
+            course_dict = enrolled_course.toDict()
+            course_dict["instructor"] = instructor[0]
             result.append(course_dict)
 
-        return {"status": "success", "message": courses_data}
+        return {"status": "success", "message": result}
     except Exception as e:
         message = f"{e}"
         session.rollback()
@@ -226,7 +228,7 @@ def get_course_by_name(name):
     session = create_session()
     
     try:
-        course_data = session.query(Courses).options(joinedload(Courses.users)).filter_by(course=name).all()
+        course_data = session.query(Courses).options(joinedload(Courses.users)).filter(Courses.course.like(f"%{name}%")).all()
         if not course_data:
             return {"status": "error", "message": "Can't find courses with the name."}
         
@@ -256,6 +258,8 @@ def enroll_course(_id, student):
             return {"status": "error", "message": "The course doesn't exist."}
         
         students = json.loads(course_data.students)
+        if int(_id) in students:
+            return {"status": "success", "message": "The student has enrolled the course."}
         students.append(student)
         course_data.students = json.dumps(students)
         session.commit()
