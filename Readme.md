@@ -37,7 +37,14 @@ This is a Course Management System built with TypeScript + React for the fronten
 - Database: SQLite with SQLAlchemy ORM
 - Authentication: JWT (JSON Web Tokens)
 - CORS Handling: Flask-CORS
-  <br />
+
+<br>
+Because HTTP is a stateless protocol, which means the system would not remain the session state in the system. As a result, the system needs a solution to send the request with information securely.
+
+<br>
+With JWT (JSON Web Token), the application can use it as an authentication method to authorize the user’s actions and transmit the system’s state. A JWT consists of three parts: the header, payload, and signature. The header specifies the encryption method, the payload stores the user information, and the signature secures the token, ensuring its integrity and preventing attacks.
+
+<br>
 
 ## Prerequisites
 
@@ -61,14 +68,14 @@ Before you begin, ensure you have the following installed:
 
 We welcome contributions to enhance this project. Feel free to open issues or submit pull requests.
 
-### License
-
-This project is licensed under the MIT License.\
-**Copyright © 2024-present Lawrence Wu**
-
 ### Contact
 
 For any inquiries or support, please contact:
 
 - Name: Lawrence
 - Email: lawrence891106@gmail.com
+
+## License
+
+This project is licensed under the MIT License.\
+**Copyright © 2024-present Lawrence Wu**
