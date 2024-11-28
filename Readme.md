@@ -14,13 +14,13 @@ This is a Course Management System built with TypeScript + React for the fronten
 - View available courses.
 - Enroll in courses.
 - View the courses they are enrolled in.
+- Search the courses that in the database.
 
 #### For Instructors:
 
 - Create new courses with detailed descriptions and credit information.
 - View and manage the courses they have created.
 - Access a list of students enrolled in their courses.
-  <br />
 
 ## Tech Stack
 
@@ -28,7 +28,6 @@ This is a Course Management System built with TypeScript + React for the fronten
 
 - Framework: React
 - Language: TypeScript
-- HTTP Client: Axios
 - Styling: CSS/SCSS
 
 ### Backend
