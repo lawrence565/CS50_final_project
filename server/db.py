@@ -273,3 +273,27 @@ def enroll_course(_id, student):
     
     finally:
         session.close()
+
+def edit_course_by_id(_id, course, description, credits):
+    session = create_session()
+
+    try:
+        course_data = session.query(Courses).filter(Courses._id == _id).first()
+
+        if not course_data:
+            return {"status": "error", "message": "The course doesn't exist."}
+        
+        course_data.course = course
+        course_data.description = description
+        course_data.credits = credits
+        session.commit()
+
+        return {"status": "success", "message": "Success"}
+    except Exception as e:
+        message = f"{e}"
+        session.rollback()
+        print("\nfrom db", message)
+        return {"status": "error", "message": message}
+    
+    finally:
+        session.close()

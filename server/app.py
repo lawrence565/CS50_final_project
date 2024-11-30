@@ -164,3 +164,13 @@ def get_instructor_course(_id):
         return result["message"], 400
 
     return jsonify(result["message"]), 200
+
+@app.route(COURSE_ROUTE + "/patch/<_id>", methods=["PATCH"])
+@jwt_required()
+def edit_course(_id):
+    result = db.edit_course_by_id(_id)
+
+    if result["status"] == "error":
+        return result["message"], 400
+
+    return jsonify(result["message"]), 200
