@@ -317,3 +317,25 @@ def edit_course_by_id(_id, course, description, credits,):
     
     finally:
         session.close()
+
+def delete_course_by_id(_id):
+    session = create_session()
+
+    try:
+        course_data = session.query(Courses).filter(Courses._id == _id).first()
+
+        if not course_data:
+            return {"status": "error", "message": "The course doesn't exist."}
+        
+        session.delete(course_data)
+        session.commit()
+
+        return {"status": "success", "message": f"Course {course_data.course} deleted."}
+    except Exception as e:
+        message = f"{e}"
+        session.rollback()
+        print("\nfrom db", message)
+        return {"status": "error", "message": message}
+    
+    finally:
+        session.close()

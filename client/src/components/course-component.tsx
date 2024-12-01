@@ -21,6 +21,17 @@ const CourseComponent: React.FC<CourseComponentProps> = ({ currentUser }) => {
     setShowAllCourse(!showAllCourse);
   };
 
+  function handleDelete(_id: string) {
+    CourseService.delete(_id)
+      .then((data) => {
+        window.alert(data.data);
+        navigate("/course");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
   useEffect(() => {
     let _id;
 
@@ -103,9 +114,15 @@ const CourseComponent: React.FC<CourseComponentProps> = ({ currentUser }) => {
                   style={{ width: "18rem", margin: "1rem" }}
                   key={course._id}
                 >
-                  <div className="card-body">
+                  <div className="card-body d-flex flex-column justify-content-center">
                     <h5 className="card-title">{course.course}</h5>
-                    <p style={{ margin: "0.5rem 0rem" }} className="card-text">
+                    <p
+                      style={{
+                        margin: "0.5rem 0rem",
+                        height: "25%",
+                      }}
+                      className="card-text course-card-text"
+                    >
                       {course.description}
                     </p>
                     <br />
@@ -113,13 +130,22 @@ const CourseComponent: React.FC<CourseComponentProps> = ({ currentUser }) => {
                       Instructor: {course.instructor}
                     </p>
                     {allowEdit && (
-                      <a
-                        className="btn btn-primary btn-sm"
-                        type="button"
-                        href={`/editCourse/${course._id}`}
-                      >
-                        Edit course
-                      </a>
+                      <div className="d-flex">
+                        <a
+                          className="btn btn-primary btn-sm"
+                          type="button"
+                          href={`/editCourse/${course._id}`}
+                        >
+                          Edit course
+                        </a>
+                        <button
+                          className="btn btn-primary btn-sm ms-2"
+                          type="button"
+                          onClick={() => handleDelete(course._id)}
+                        >
+                          Delete course
+                        </button>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -134,7 +160,7 @@ const CourseComponent: React.FC<CourseComponentProps> = ({ currentUser }) => {
       )}
       {!showAllCourse && (
         <button
-          className="btn btn-primary btn-lg"
+          className="btn btn-primary btn-lg mt-4"
           type="button"
           onClick={handleAllCourseButton}
         >
@@ -143,7 +169,7 @@ const CourseComponent: React.FC<CourseComponentProps> = ({ currentUser }) => {
       )}
       {showAllCourse && (
         <button
-          className="btn btn-primary btn-lg"
+          className="btn btn-primary btn-lg mt-4"
           type="button"
           onClick={handleAllCourseButton}
         >

@@ -11,26 +11,28 @@ const ProfileComponent: React.FC<CourseComponentProps> = (props) => {
         <div>
           <h2>Here's the personal inforamtion: </h2>
 
-          <table className="table">
+          <table className="table table-bordered mt-4">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>User ID</th>
+                <th>Email</th>
+                <th>Role</th>
+              </tr>
+            </thead>
             <tbody>
               <tr>
                 <td>
-                  <strong>Name: {currentUser.user.username}</strong>
+                  <strong>{currentUser.user.username}</strong>
                 </td>
-              </tr>
-              <tr>
                 <td>
-                  <strong>User ID: {currentUser.user._id}</strong>
+                  <strong>{currentUser.user._id}</strong>
                 </td>
-              </tr>
-              <tr>
                 <td>
-                  <strong>Email: {currentUser.user.email}</strong>
+                  <strong>{currentUser.user.email}</strong>
                 </td>
-              </tr>
-              <tr>
                 <td>
-                  <strong>Role: {currentUser.user.role}</strong>
+                  <strong>{currentUser.user.role}</strong>
                 </td>
               </tr>
             </tbody>

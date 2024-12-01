@@ -128,6 +128,21 @@ class CourseService {
       { headers: { Authorization: `Bearer ${token}` } }
     );
   }
+
+  delete(_id: string) {
+    let token;
+    const user = localStorage.getItem("user");
+
+    if (user) {
+      token = JSON.parse(user).token;
+    } else {
+      token = "";
+    }
+
+    return axios.delete(API_USE + "/delete/" + `${_id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
 }
 
 export default new CourseService();

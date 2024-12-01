@@ -200,3 +200,16 @@ def edit_course(_id):
         return result["message"], 400
 
     return jsonify(result["message"]), 200
+
+@app.route(COURSE_ROUTE + "/delete/<_id>", methods=["DELETE"])
+@jwt_required()
+def deleteCourseById(_id):
+    current_user = get_jwt_identity()
+    if current_user["role"] != "instructor":
+        return "Only instructor can delete courses.", 400
+    
+    result = db.delete_course_by_id(_id)
+    if result["status"] == "error":
+        return result["message"], 400
+
+    return result["message"], 200

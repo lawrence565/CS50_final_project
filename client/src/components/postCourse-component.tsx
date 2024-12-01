@@ -1,5 +1,5 @@
 import { useState, ChangeEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { CourseComponentProps } from "../types/types";
 import CourseService from "../services/course.service";
 
@@ -26,7 +26,7 @@ const PostCourseComponent = (props: CourseComponentProps) => {
     CourseService.post(title, description, credits)
       .then(() => {
         window.alert("New course created.");
-        navigate("/course");
+        redirect("/course");
       })
       .catch((error) => {
         console.log(error.response);
