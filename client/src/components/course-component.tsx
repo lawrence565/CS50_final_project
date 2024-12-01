@@ -11,6 +11,7 @@ interface CourseComponentProps {
 const CourseComponent: React.FC<CourseComponentProps> = ({ currentUser }) => {
   let [courseData, setCourseData] = useState<course_data[]>();
   let [showAllCourse, setShowAllCourse] = useState<Boolean>(false);
+  let [allowEdit, setAllowEdit] = useState<Boolean>(false);
   const navigate = useNavigate();
   const handleTakeToLogin = () => {
     navigate("/login");
@@ -26,6 +27,7 @@ const CourseComponent: React.FC<CourseComponentProps> = ({ currentUser }) => {
     if (currentUser) {
       _id = currentUser.user._id;
       if (currentUser.user.role == "instructor") {
+        setAllowEdit(true);
         if (!showAllCourse) {
           CourseService.get(_id)
             .then((data) => {
@@ -44,6 +46,7 @@ const CourseComponent: React.FC<CourseComponentProps> = ({ currentUser }) => {
             });
         }
       } else if (currentUser.user.role == "student") {
+        setAllowEdit(false);
         if (!showAllCourse) {
           CourseService.getEnrolledCourses(_id)
             .then((data) => {
@@ -109,6 +112,15 @@ const CourseComponent: React.FC<CourseComponentProps> = ({ currentUser }) => {
                     <p style={{ margin: "0.5rem 0rem" }}>
                       Instructor: {course.instructor}
                     </p>
+                    {allowEdit && (
+                      <a
+                        className="btn btn-primary btn-sm"
+                        type="button"
+                        href={`/editCourse/${course._id}`}
+                      >
+                        Edit course
+                      </a>
+                    )}
                   </div>
                 </div>
               );

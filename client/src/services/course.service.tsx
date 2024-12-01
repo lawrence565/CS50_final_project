@@ -65,6 +65,21 @@ class CourseService {
     });
   }
 
+  getCoursesById(_id: string) {
+    let token;
+    const user = localStorage.getItem("user");
+
+    if (user) {
+      token = JSON.parse(user).token;
+    } else {
+      token = "";
+    }
+
+    return axios.get(API_USE + "/findById/" + _id, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  }
+
   enroll(_id: string) {
     let token;
     const user = localStorage.getItem("user");
@@ -95,6 +110,23 @@ class CourseService {
     return axios.get(API_USE + "/instructor/" + _id, {
       headers: { Authorization: `Bearer ${token}` },
     });
+  }
+
+  edit(_id: string, title: string, description: string, credits: string) {
+    let token;
+    const user = localStorage.getItem("user");
+
+    if (user) {
+      token = JSON.parse(user).token;
+    } else {
+      token = "";
+    }
+
+    return axios.put(
+      API_USE + "/edit/" + `${_id}`,
+      { title, description, credits },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
   }
 }
 

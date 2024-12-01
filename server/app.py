@@ -26,7 +26,7 @@ def after_request(response):
     response.headers["Access-Control-Allow-Origin"] = "*"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
     response.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONs"
-    print("Receiveing request")
+    print("Receiveing", request.method , "request")
     return response
 
 @app.route(AUTH_ROUTE + "/login", methods=["POST"])
@@ -118,6 +118,16 @@ def getCoursesByName(name):
     
     return jsonify(result["message"]), 200
 
+@app.route(COURSE_ROUTE + "/findById/<_id>", methods=["GET"])
+@jwt_required()
+def getCoursesById(_id):
+    result = db.get_course_by_id(_id)
+    
+    if result["status"] == "error":
+        return result["message"], 400
+    
+    return jsonify(result["message"]), 200
+
 @app.route(COURSE_ROUTE + "/enroll/<_id>", methods=["POST"])
 @jwt_required()
 def enroll_course_by_id(_id):
@@ -165,10 +175,26 @@ def get_instructor_course(_id):
 
     return jsonify(result["message"]), 200
 
-@app.route(COURSE_ROUTE + "/patch/<_id>", methods=["PATCH"])
+@app.route(COURSE_ROUTE + "/edit/<_id>", methods=["PUT"])
 @jwt_required()
 def edit_course(_id):
-    result = db.edit_course_by_id(_id)
+    current_user = get_jwt_identity()
+    if current_user["role"] != "instructor":
+        return "Only instructor can edit courses.", 400
+    
+    course_data = request.get_json()
+    error = validation.course_validation(course_data)
+    if error and len(error) > 0:
+        message = ""
+        for i in error:
+            message += (i["message"] + " ")
+        return message, 400
+    
+    course = course_data.get("title")
+    description = course_data.get("description")
+    credits = course_data.get("credits")
+
+    result = db.edit_course_by_id(_id, course, description, credits)
 
     if result["status"] == "error":
         return result["message"], 400

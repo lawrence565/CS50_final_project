@@ -248,6 +248,26 @@ def get_course_by_name(name):
     finally:
         session.close()
 
+def get_course_by_id(_id):
+    session = create_session()
+    
+    try:
+        course_data = session.query(Courses).options(joinedload(Courses.users)).filter(Courses._id == _id).first()
+        if not course_data:
+            return {"status": "error", "message": "Can't find courses with the name."}
+        course_result = course_data.toDict()
+        course_result["instructor"] = course_data.users.username
+
+        return {"status": "success", "message": course_result}
+    except Exception as e:
+        message = f"{e}"
+        session.rollback()
+        print("\nfrom db", message)
+        return {"status": "error", "message": message}
+    
+    finally:
+        session.close()
+
 def enroll_course(_id, student):
     session = create_session()
     
@@ -274,7 +294,7 @@ def enroll_course(_id, student):
     finally:
         session.close()
 
-def edit_course_by_id(_id, course, description, credits):
+def edit_course_by_id(_id, course, description, credits,):
     session = create_session()
 
     try:
@@ -288,7 +308,7 @@ def edit_course_by_id(_id, course, description, credits):
         course_data.credits = credits
         session.commit()
 
-        return {"status": "success", "message": "Success"}
+        return {"status": "success", "message": course_data.toDict()}
     except Exception as e:
         message = f"{e}"
         session.rollback()
